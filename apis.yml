@@ -7,8 +7,7 @@ type: Index
 position: Consumer
 access: 3rd-Party
 image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
-tags:
-  - API
+tags: []
 created: '2025-01-08'
 modified: '2026-03-16'
 url: >-
@@ -21,8 +20,7 @@ apis:
       The Roles API is an extension of the Access API and defines a set of
       actions that a user is allowed to perform on certain system levels.
     humanURL: https://moodledev.io
-    tags:
-      - API
+    tags: []
     properties:
       - type: Documentation
         url: https://moodledev.io
