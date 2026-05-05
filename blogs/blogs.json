@@ -1,0 +1,13 @@
+{
+  "repo": "moodle",
+  "feeds": [
+    {
+      "source": "https://moodle.com/news/",
+      "feed_url": "https://moodle.com/feed/",
+      "saved": 10,
+      "title": "Moodle"
+    }
+  ],
+  "post_count": 10,
+  "fetched": "2026-05-03T23:32:27Z"
+}
