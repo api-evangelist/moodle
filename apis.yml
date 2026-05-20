@@ -193,6 +193,10 @@ apis:
       - type: Documentation
         url: https://moodledev.io/docs/apis/subsystems/payment
 common:
+  - type: GitHubOrganization
+    url: https://github.com/moodle
+  - type: LinkedIn
+    url: https://www.linkedin.com/company/moodle
   - type: Portal
     url: https://moodledev.io
   - type: Documentation
