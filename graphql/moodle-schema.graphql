@@ -1,0 +1,1400 @@
+"""
+Moodle GraphQL Schema
+Conceptual schema derived from Moodle REST API (moodledev.io/docs/apis/subsystems/external/)
+Covers: courses, users, enrollments, grades, assignments, quizzes, forums,
+        resources, activities, calendar events, badges, and completion tracking.
+"""
+
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+# ---------------------------------------------------------------------------
+# Root Query
+# ---------------------------------------------------------------------------
+
+type Query {
+  # Users
+  user(id: ID!): User
+  users(filters: UserFilter, limit: Int, offset: Int): UserConnection
+
+  # Courses
+  course(id: ID!): Course
+  courses(filters: CourseFilter, limit: Int, offset: Int): CourseConnection
+  coursesByField(field: String!, value: String!): [Course!]
+
+  # Enrollments
+  enrollment(id: ID!): Enrollment
+  enrollmentsByCourse(courseId: ID!): [Enrollment!]
+  enrollmentsByUser(userId: ID!): [Enrollment!]
+
+  # Grades
+  gradeItem(id: ID!): GradeItem
+  gradeItems(courseId: ID!): [GradeItem!]
+  gradeReport(courseId: ID!, userId: ID!): GradeReport
+
+  # Assignments
+  assignment(id: ID!): Assignment
+  assignmentsByCourse(courseId: ID!): [Assignment!]
+  assignmentSubmission(assignmentId: ID!, userId: ID!): AssignmentSubmission
+  assignmentSubmissions(assignmentId: ID!): [AssignmentSubmission!]
+
+  # Quizzes
+  quiz(id: ID!): Quiz
+  quizzesByCourse(courseId: ID!): [Quiz!]
+  quizAttempt(id: ID!): QuizAttempt
+  quizAttemptsByUser(quizId: ID!, userId: ID!): [QuizAttempt!]
+
+  # Forums
+  forum(id: ID!): Forum
+  forumsByCourse(courseId: ID!): [Forum!]
+  forumDiscussion(id: ID!): ForumDiscussion
+  forumDiscussions(forumId: ID!, limit: Int, offset: Int): ForumDiscussionConnection
+  forumPost(id: ID!): ForumPost
+  forumPosts(discussionId: ID!): [ForumPost!]
+
+  # Resources / Activities
+  courseModule(id: ID!): CourseModule
+  courseModules(courseId: ID!, modname: String): [CourseModule!]
+  courseSection(id: ID!): CourseSection
+  courseSections(courseId: ID!): [CourseSection!]
+
+  # Calendar Events
+  calendarEvent(id: ID!): CalendarEvent
+  calendarEvents(filters: CalendarEventFilter): [CalendarEvent!]
+
+  # Badges
+  badge(id: ID!): Badge
+  badges(courseId: ID): [Badge!]
+  userBadges(userId: ID!): [IssuedBadge!]
+
+  # Completion
+  completionStatus(courseId: ID!, userId: ID!): CompletionStatus
+  activityCompletions(courseId: ID!, userId: ID!): [ActivityCompletion!]
+
+  # Site Info
+  siteInfo: SiteInfo
+
+  # Cohorts
+  cohort(id: ID!): Cohort
+  cohorts(limit: Int, offset: Int): CohortConnection
+
+  # Roles
+  role(id: ID!): Role
+  roles: [Role!]
+
+  # Files
+  files(contextId: ID!, component: String!, fileArea: String!): [MoodleFile!]
+
+  # Messages
+  message(id: ID!): Message
+  conversations(userId: ID!, limit: Int, offset: Int): ConversationConnection
+
+  # Notifications
+  notifications(userId: ID!, limit: Int, offset: Int): NotificationConnection
+
+  # Tags
+  tag(id: ID!): Tag
+  tags(limit: Int, offset: Int): [Tag!]
+
+  # Competencies
+  competency(id: ID!): Competency
+  competencies(frameworkId: ID!): [Competency!]
+  competencyFramework(id: ID!): CompetencyFramework
+  competencyFrameworks: [CompetencyFramework!]
+
+  # Groups
+  group(id: ID!): Group
+  groupsByCourse(courseId: ID!): [Group!]
+  grouping(id: ID!): Grouping
+  groupingsByCourse(courseId: ID!): [Grouping!]
+}
+
+# ---------------------------------------------------------------------------
+# Root Mutation
+# ---------------------------------------------------------------------------
+
+type Mutation {
+  # Users
+  createUser(input: CreateUserInput!): User
+  updateUser(id: ID!, input: UpdateUserInput!): User
+  deleteUser(id: ID!): Boolean
+  suspendUser(id: ID!): User
+
+  # Courses
+  createCourse(input: CreateCourseInput!): Course
+  updateCourse(id: ID!, input: UpdateCourseInput!): Course
+  deleteCourse(id: ID!): Boolean
+  duplicateCourse(id: ID!): Course
+
+  # Enrollments
+  enrollUser(input: EnrollUserInput!): Enrollment
+  unenrollUser(courseId: ID!, userId: ID!, roleId: ID): Boolean
+
+  # Grades
+  updateGrade(input: UpdateGradeInput!): GradeItem
+
+  # Assignments
+  submitAssignment(input: SubmitAssignmentInput!): AssignmentSubmission
+  gradeAssignment(input: GradeAssignmentInput!): AssignmentGrade
+
+  # Forums
+  createForumDiscussion(input: CreateForumDiscussionInput!): ForumDiscussion
+  replyToForumPost(input: ReplyToForumPostInput!): ForumPost
+  deleteForumPost(id: ID!): Boolean
+
+  # Calendar Events
+  createCalendarEvent(input: CreateCalendarEventInput!): CalendarEvent
+  updateCalendarEvent(id: ID!, input: UpdateCalendarEventInput!): CalendarEvent
+  deleteCalendarEvent(id: ID!): Boolean
+
+  # Completion
+  markActivityComplete(courseId: ID!, cmId: ID!, userId: ID!): ActivityCompletion
+  markCourseComplete(courseId: ID!, userId: ID!): CompletionStatus
+
+  # Messages
+  sendMessage(input: SendMessageInput!): Message
+
+  # Groups
+  createGroup(input: CreateGroupInput!): Group
+  addUserToGroup(groupId: ID!, userId: ID!): Boolean
+  removeUserFromGroup(groupId: ID!, userId: ID!): Boolean
+
+  # Cohorts
+  createCohort(input: CreateCohortInput!): Cohort
+  addUserToCohort(cohortId: ID!, userId: ID!): Boolean
+  removeUserFromCohort(cohortId: ID!, userId: ID!): Boolean
+
+  # Badges
+  issueBadge(badgeId: ID!, userId: ID!): IssuedBadge
+  revokeBadge(issuedBadgeId: ID!): Boolean
+}
+
+# ---------------------------------------------------------------------------
+# User types
+# ---------------------------------------------------------------------------
+
+type User {
+  id: ID!
+  username: String!
+  firstname: String
+  lastname: String
+  fullname: String
+  email: String!
+  phone1: String
+  phone2: String
+  department: String
+  institution: String
+  idnumber: String
+  lang: String
+  timezone: String
+  description: String
+  profileImageUrl: String
+  profileImageUrlSmall: String
+  suspended: Boolean
+  confirmed: Boolean
+  auth: String
+  lastLogin: DateTime
+  firstAccess: DateTime
+  lastAccess: DateTime
+  created: DateTime
+  modified: DateTime
+  roles: [Role!]
+  preferences: [UserPreference!]
+  customFields: [CustomField!]
+  enrollments: [Enrollment!]
+  groups: [Group!]
+  badges: [IssuedBadge!]
+}
+
+type UserPreference {
+  name: String!
+  value: String
+}
+
+type UserConnection {
+  nodes: [User!]!
+  totalCount: Int!
+  pageInfo: PageInfo!
+}
+
+input UserFilter {
+  username: String
+  email: String
+  firstname: String
+  lastname: String
+  suspended: Boolean
+  confirmed: Boolean
+  cohortId: ID
+}
+
+input CreateUserInput {
+  username: String!
+  password: String
+  firstname: String!
+  lastname: String!
+  email: String!
+  auth: String
+  idnumber: String
+  lang: String
+  timezone: String
+  institution: String
+  department: String
+  phone1: String
+  description: String
+  customFields: [CustomFieldInput!]
+}
+
+input UpdateUserInput {
+  firstname: String
+  lastname: String
+  email: String
+  phone1: String
+  department: String
+  institution: String
+  lang: String
+  timezone: String
+  description: String
+  suspended: Boolean
+  customFields: [CustomFieldInput!]
+}
+
+# ---------------------------------------------------------------------------
+# Course types
+# ---------------------------------------------------------------------------
+
+type Course {
+  id: ID!
+  shortname: String!
+  fullname: String!
+  displayname: String
+  idnumber: String
+  summary: String
+  summaryFormat: TextFormat
+  format: String
+  showGrades: Boolean
+  newsItems: Int
+  startDate: DateTime
+  endDate: DateTime
+  maxBytes: Int
+  showReports: Boolean
+  visible: Boolean
+  groupMode: GroupMode
+  groupModeForced: Boolean
+  defaultGroupingId: ID
+  lang: String
+  timeCreated: DateTime
+  timeModified: DateTime
+  categoryId: ID
+  category: CourseCategory
+  sections: [CourseSection!]
+  modules: [CourseModule!]
+  enrollments: [Enrollment!]
+  gradeItems: [GradeItem!]
+  assignments: [Assignment!]
+  quizzes: [Quiz!]
+  forums: [Forum!]
+  completionStatus: CompletionStatus
+  tags: [Tag!]
+}
+
+type CourseConnection {
+  nodes: [Course!]!
+  totalCount: Int!
+  pageInfo: PageInfo!
+}
+
+input CourseFilter {
+  categoryId: ID
+  visible: Boolean
+  shortname: String
+  fullname: String
+}
+
+input CreateCourseInput {
+  shortname: String!
+  fullname: String!
+  categoryId: ID!
+  summary: String
+  format: String
+  startDate: DateTime
+  endDate: DateTime
+  visible: Boolean
+  lang: String
+}
+
+input UpdateCourseInput {
+  fullname: String
+  shortname: String
+  summary: String
+  categoryId: ID
+  startDate: DateTime
+  endDate: DateTime
+  visible: Boolean
+  lang: String
+}
+
+type CourseCategory {
+  id: ID!
+  name: String!
+  idnumber: String
+  description: String
+  parent: ID
+  sortOrder: Int
+  courseCount: Int
+  visible: Boolean
+  depth: Int
+  path: String
+}
+
+type CourseSection {
+  id: ID!
+  course: Course!
+  section: Int!
+  name: String
+  summary: String
+  summaryFormat: TextFormat
+  visible: Boolean
+  modules: [CourseModule!]
+}
+
+type CourseModule {
+  id: ID!
+  course: Course!
+  section: CourseSection
+  modname: String!
+  instance: ID!
+  name: String!
+  description: String
+  visible: Boolean
+  visibleOnCoursePage: Boolean
+  indent: Int
+  url: String
+  completionData: ActivityCompletion
+  availability: String
+}
+
+# ---------------------------------------------------------------------------
+# Enrollment types
+# ---------------------------------------------------------------------------
+
+type Enrollment {
+  id: ID!
+  course: Course!
+  user: User!
+  role: Role!
+  enrolMethod: String
+  status: EnrollmentStatus!
+  timeStart: DateTime
+  timeEnd: DateTime
+  timeCreated: DateTime
+  timeModified: DateTime
+}
+
+enum EnrollmentStatus {
+  ACTIVE
+  SUSPENDED
+  NOT_CURRENT
+}
+
+input EnrollUserInput {
+  courseId: ID!
+  userId: ID!
+  roleId: ID!
+  enrolMethod: String
+  timeStart: DateTime
+  timeEnd: DateTime
+  suspend: Boolean
+}
+
+# ---------------------------------------------------------------------------
+# Grade types
+# ---------------------------------------------------------------------------
+
+type GradeItem {
+  id: ID!
+  course: Course!
+  itemname: String
+  itemtype: String
+  itemmodule: String
+  iteminstance: ID
+  itemnumber: Int
+  idnumber: String
+  gradeType: GradeType
+  gradeMax: Float
+  gradeMin: Float
+  gradePass: Float
+  locked: Boolean
+  hidden: Boolean
+  weightOverride: Boolean
+  aggregationCoef: Float
+  sortOrder: Int
+  displayType: Int
+  decimals: Int
+}
+
+type GradeReport {
+  course: Course!
+  user: User!
+  items: [GradeDetail!]!
+  totalGrade: Float
+  totalGradeFormatted: String
+}
+
+type GradeDetail {
+  gradeItem: GradeItem!
+  grade: Float
+  gradeFormatted: String
+  feedback: String
+  feedbackFormat: TextFormat
+  userModified: DateTime
+  overridden: Boolean
+  locked: Boolean
+  excluded: Boolean
+  hidden: Boolean
+}
+
+enum GradeType {
+  NONE
+  VALUE
+  SCALE
+  TEXT
+}
+
+input UpdateGradeInput {
+  gradeItemId: ID!
+  userId: ID!
+  grade: Float
+  feedback: String
+  feedbackFormat: TextFormat
+}
+
+# ---------------------------------------------------------------------------
+# Assignment types
+# ---------------------------------------------------------------------------
+
+type Assignment {
+  id: ID!
+  course: Course!
+  cmid: ID!
+  name: String!
+  intro: String
+  introFormat: TextFormat
+  dueDate: DateTime
+  allowSubmissionsFromDate: DateTime
+  cutOffDate: DateTime
+  gradingDueDate: DateTime
+  noSubmissions: Boolean
+  submissionDrafts: Boolean
+  sendNotifications: Boolean
+  sendLateNotifications: Boolean
+  sendStudentNotifications: Boolean
+  requireSubmissionStatement: Boolean
+  completionSubmit: Boolean
+  teamSubmission: Boolean
+  requireAllTeamMembersSubmit: Boolean
+  teamSubmissionGroupingId: ID
+  blindMarking: Boolean
+  maxAttempts: Int
+  grade: Float
+  configs: [AssignmentConfig!]
+  submissions: [AssignmentSubmission!]
+}
+
+type AssignmentConfig {
+  plugin: String!
+  subtype: String!
+  name: String!
+  value: String
+}
+
+type AssignmentSubmission {
+  id: ID!
+  assignment: Assignment!
+  user: User!
+  attemptnumber: Int!
+  timecreated: DateTime
+  timemodified: DateTime
+  status: SubmissionStatus!
+  groupid: ID
+  plugins: [SubmissionPlugin!]
+  grade: AssignmentGrade
+}
+
+type SubmissionPlugin {
+  type: String!
+  name: String!
+  editorfields: [EditorField!]
+  fileareas: [FileArea!]
+}
+
+type EditorField {
+  name: String!
+  description: String
+  text: String
+  format: TextFormat
+}
+
+type FileArea {
+  area: String!
+  files: [MoodleFile!]
+}
+
+type AssignmentGrade {
+  id: ID!
+  assignment: Assignment!
+  user: User!
+  timecreated: DateTime
+  timemodified: DateTime
+  grader: User
+  grade: Float
+  attemptnumber: Int
+  feedback: String
+  feedbackFormat: TextFormat
+}
+
+enum SubmissionStatus {
+  NEW
+  DRAFT
+  SUBMITTED
+  REOPENED
+}
+
+input SubmitAssignmentInput {
+  assignmentId: ID!
+  userId: ID!
+  pluginData: [SubmissionPluginDataInput!]!
+}
+
+input SubmissionPluginDataInput {
+  plugin: String!
+  subtype: String!
+  name: String!
+  value: String!
+}
+
+input GradeAssignmentInput {
+  assignmentId: ID!
+  userId: ID!
+  grade: Float!
+  attemptnumber: Int
+  feedback: String
+  feedbackFormat: TextFormat
+  pluginData: [SubmissionPluginDataInput!]
+}
+
+# ---------------------------------------------------------------------------
+# Quiz types
+# ---------------------------------------------------------------------------
+
+type Quiz {
+  id: ID!
+  course: Course!
+  cmid: ID!
+  name: String!
+  intro: String
+  introFormat: TextFormat
+  timeOpen: DateTime
+  timeClose: DateTime
+  timeLimit: Int
+  overdueHandling: String
+  graceperiod: Int
+  preferredBehaviour: String
+  attempts: Int
+  attemptonlast: Boolean
+  gradeMethod: QuizGradeMethod
+  decimalpoints: Int
+  questiondecimalpoints: Int
+  reviewattempt: Int
+  reviewcorrectness: Int
+  reviewmarks: Int
+  reviewspecificfeedback: Int
+  reviewgeneralfeedback: Int
+  reviewrightanswer: Int
+  reviewoverallfeedback: Int
+  questionsperpage: Int
+  navmethod: String
+  shuffleanswers: Boolean
+  sumgrades: Float
+  grade: Float
+  timecreated: DateTime
+  timemodified: DateTime
+  questions: [QuizQuestion!]
+  attempts(userId: ID): [QuizAttempt!]
+}
+
+type QuizQuestion {
+  id: ID!
+  quiz: Quiz!
+  slot: Int!
+  type: String!
+  name: String!
+  questiontext: String
+  questiontextFormat: TextFormat
+  generalfeedback: String
+  defaultmark: Float
+  penalty: Float
+  answers: [QuizAnswer!]
+}
+
+type QuizAnswer {
+  id: ID!
+  question: QuizQuestion!
+  answer: String
+  answerFormat: TextFormat
+  fraction: Float
+  feedback: String
+  feedbackFormat: TextFormat
+}
+
+type QuizAttempt {
+  id: ID!
+  quiz: Quiz!
+  user: User!
+  attempt: Int!
+  uniqueid: ID
+  layout: String
+  currentpage: Int
+  preview: Boolean
+  state: AttemptState!
+  timestart: DateTime
+  timefinish: DateTime
+  timemodified: DateTime
+  timecheckstate: DateTime
+  sumgrades: Float
+  grade: Float
+  responses: [QuizResponse!]
+}
+
+type QuizResponse {
+  question: QuizQuestion!
+  answer: String
+  state: String
+  fraction: Float
+  flagged: Boolean
+  mark: Float
+}
+
+enum QuizGradeMethod {
+  HIGHEST_GRADE
+  AVERAGE_GRADE
+  FIRST_ATTEMPT
+  LAST_ATTEMPT
+}
+
+enum AttemptState {
+  IN_PROGRESS
+  OVERDUE
+  FINISHED
+  ABANDONED
+}
+
+# ---------------------------------------------------------------------------
+# Forum types
+# ---------------------------------------------------------------------------
+
+type Forum {
+  id: ID!
+  course: Course!
+  cmid: ID!
+  type: String!
+  name: String!
+  intro: String
+  introFormat: TextFormat
+  assessed: Int
+  assesstimestart: DateTime
+  assesstimefinish: DateTime
+  scale: Int
+  maxbytes: Int
+  maxattachments: Int
+  forcesubscribe: Int
+  trackingtype: Int
+  rsstype: Int
+  rssarticles: Int
+  timemodified: DateTime
+  warnafter: Int
+  blockafter: Int
+  blockperiod: Int
+  completiondiscussions: Int
+  completionreplies: Int
+  completionposts: Int
+  showdescription: Boolean
+  discussions(limit: Int, offset: Int): ForumDiscussionConnection
+}
+
+type ForumDiscussion {
+  id: ID!
+  forum: Forum!
+  name: String!
+  firstPost: ForumPost!
+  userFullName: String
+  user: User
+  timecreated: DateTime
+  timemodified: DateTime
+  timestart: DateTime
+  timeend: DateTime
+  pinned: Boolean
+  locked: Boolean
+  starred: Boolean
+  canReply: Boolean
+  numReplies: Int
+  numUnread: Int
+  posts: [ForumPost!]
+}
+
+type ForumDiscussionConnection {
+  nodes: [ForumDiscussion!]!
+  totalCount: Int!
+  pageInfo: PageInfo!
+}
+
+type ForumPost {
+  id: ID!
+  discussion: ForumDiscussion!
+  parent: ForumPost
+  user: User
+  created: DateTime
+  modified: DateTime
+  mailed: Boolean
+  subject: String!
+  message: String
+  messageFormat: TextFormat
+  messageTrust: Int
+  attachment: Boolean
+  attachments: [MoodleFile!]
+  totalscore: Int
+  mailnow: Boolean
+  deleted: Boolean
+  privatereplyto: ID
+  wordCount: Int
+  charCount: Int
+  replies: [ForumPost!]
+}
+
+input CreateForumDiscussionInput {
+  forumId: ID!
+  subject: String!
+  message: String!
+  messageFormat: TextFormat
+  timestart: DateTime
+  timeend: DateTime
+  pinned: Boolean
+}
+
+input ReplyToForumPostInput {
+  forumId: ID!
+  discussionId: ID!
+  parentId: ID!
+  subject: String!
+  message: String!
+  messageFormat: TextFormat
+}
+
+# ---------------------------------------------------------------------------
+# Calendar Event types
+# ---------------------------------------------------------------------------
+
+type CalendarEvent {
+  id: ID!
+  name: String!
+  description: String
+  descriptionFormat: TextFormat
+  location: String
+  categoryId: ID
+  groupId: ID
+  userId: ID
+  courseId: ID
+  course: Course
+  groupmId: ID
+  modulename: String
+  instance: ID
+  eventtype: EventType!
+  timestart: DateTime!
+  timeduration: Int
+  timesort: DateTime
+  timeusermidnight: DateTime
+  visible: Boolean
+  uuid: String
+  sequence: Int
+  timemodified: DateTime
+  subscriptionId: ID
+  repeatId: ID
+  action: EventAction
+}
+
+type EventAction {
+  name: String!
+  url: String!
+  itemcount: Int
+  actionable: Boolean
+  online: Boolean
+}
+
+enum EventType {
+  USER
+  GROUP
+  COURSE
+  CATEGORY
+  SITE
+}
+
+input CalendarEventFilter {
+  courseId: ID
+  groupId: ID
+  userId: ID
+  eventtype: EventType
+  timefrom: DateTime
+  timeto: DateTime
+}
+
+input CreateCalendarEventInput {
+  name: String!
+  description: String
+  location: String
+  courseId: ID
+  groupId: ID
+  eventtype: EventType!
+  timestart: DateTime!
+  timeduration: Int
+  visible: Boolean
+  repeats: Int
+}
+
+input UpdateCalendarEventInput {
+  name: String
+  description: String
+  location: String
+  timestart: DateTime
+  timeduration: Int
+  visible: Boolean
+}
+
+# ---------------------------------------------------------------------------
+# Badge types
+# ---------------------------------------------------------------------------
+
+type Badge {
+  id: ID!
+  name: String!
+  description: String
+  timecreated: DateTime
+  timemodified: DateTime
+  usercreated: ID
+  usermodified: ID
+  issuername: String
+  issuerurl: String
+  issuercontact: String
+  expiredate: DateTime
+  expireperiod: Int
+  type: BadgeType!
+  courseid: ID
+  course: Course
+  message: String
+  messagesubject: String
+  attachment: Boolean
+  notification: Int
+  status: BadgeStatus!
+  nextcron: DateTime
+  version: String
+  language: String
+  imageauthorname: String
+  imageauthoremail: String
+  imageauthorurl: String
+  imagecaption: String
+  criteria: [BadgeCriterion!]
+  alignment: [BadgeAlignment!]
+  relatedbadges: [Badge!]
+}
+
+type BadgeCriterion {
+  id: ID!
+  badge: Badge!
+  criteriatype: Int!
+  method: Int!
+  description: String
+  descriptionformat: TextFormat
+  params: [BadgeCriterionParam!]
+}
+
+type BadgeCriterionParam {
+  id: ID!
+  critid: ID!
+  name: String!
+  value: String
+}
+
+type BadgeAlignment {
+  id: ID!
+  badgeid: ID!
+  targetName: String!
+  targetUrl: String!
+  targetDescription: String
+  targetFramework: String
+  targetCode: String
+}
+
+type IssuedBadge {
+  id: ID!
+  badge: Badge!
+  user: User!
+  issuer: String
+  dateissued: DateTime
+  dateexpire: DateTime
+  visible: Boolean
+  uniquehash: String!
+}
+
+enum BadgeType {
+  SITE
+  COURSE
+}
+
+enum BadgeStatus {
+  INACTIVE
+  ACTIVE
+  INACTIVE_LOCKED
+  ACTIVE_LOCKED
+  ARCHIVED
+}
+
+# ---------------------------------------------------------------------------
+# Completion types
+# ---------------------------------------------------------------------------
+
+type CompletionStatus {
+  course: Course!
+  user: User!
+  completed: Boolean!
+  completiongrade: Float
+  timeCompleted: DateTime
+  rpl: String
+  rplgrade: Float
+  status: CourseCompletionStatus!
+  criteria: [CompletionCriterion!]
+}
+
+type CompletionCriterion {
+  id: ID!
+  course: Course!
+  criteriatype: Int!
+  module: String
+  moduleinstance: ID
+  courseinstance: ID
+  enrolperiod: Int
+  timeend: DateTime
+  gradepass: Float
+  role: ID
+  completed: Boolean
+  completiontime: DateTime
+  grade: Float
+  unenroled: Boolean
+}
+
+type ActivityCompletion {
+  cmid: ID!
+  module: CourseModule
+  user: User
+  state: CompletionState!
+  timecompleted: DateTime
+  overrideby: ID
+  valueused: Boolean
+  hasCompletion: Boolean
+  isAutomatic: Boolean
+  isTrackedUser: Boolean
+  uservisible: Boolean
+  details: [CompletionDetail!]
+}
+
+type CompletionDetail {
+  rulename: String!
+  rulevalue: CompletionDetailValue!
+}
+
+type CompletionDetailValue {
+  status: Int!
+  description: String!
+}
+
+enum CompletionState {
+  INCOMPLETE
+  COMPLETE
+  COMPLETE_PASS
+  COMPLETE_FAIL
+}
+
+enum CourseCompletionStatus {
+  NOT_YET_STARTED
+  IN_PROGRESS
+  COMPLETE
+  COMPLETE_RPL
+}
+
+# ---------------------------------------------------------------------------
+# Site info
+# ---------------------------------------------------------------------------
+
+type SiteInfo {
+  sitename: String!
+  username: String
+  firstname: String
+  lastname: String
+  fullname: String
+  lang: String
+  userid: ID
+  siteurl: String!
+  userpictureurl: String
+  functions: [SiteFunction!]
+  downloadfiles: Boolean
+  uploadfiles: Boolean
+  release: String
+  version: String
+  mobilecssurl: String
+  advancedfeatures: [AdvancedFeature!]
+  usercanmanageownfiles: Boolean
+  userquota: Int
+  usermaxuploadfilesize: Int
+  userhomepage: Int
+  userprivateaccesskey: String
+  siteid: ID
+  sitecalendartype: String
+  usercalendartype: String
+  userissiteadmin: Boolean
+  theme: String
+  limitconcurrentlogins: Int
+  usersessionscount: Int
+}
+
+type SiteFunction {
+  name: String!
+  version: String!
+}
+
+type AdvancedFeature {
+  name: String!
+  value: Int!
+}
+
+# ---------------------------------------------------------------------------
+# Cohort types
+# ---------------------------------------------------------------------------
+
+type Cohort {
+  id: ID!
+  categoryid: ID
+  name: String!
+  idnumber: String
+  description: String
+  descriptionformat: TextFormat
+  visible: Boolean
+  component: String
+  timecreated: DateTime
+  timemodified: DateTime
+  theme: String
+  members: [User!]
+}
+
+type CohortConnection {
+  nodes: [Cohort!]!
+  totalCount: Int!
+  pageInfo: PageInfo!
+}
+
+input CreateCohortInput {
+  categoryid: ID
+  name: String!
+  idnumber: String
+  description: String
+  visible: Boolean
+}
+
+# ---------------------------------------------------------------------------
+# Role types
+# ---------------------------------------------------------------------------
+
+type Role {
+  id: ID!
+  shortname: String!
+  name: String!
+  description: String
+  sortorder: Int
+  archetype: String
+  capabilities: [Capability!]
+}
+
+type Capability {
+  id: ID!
+  name: String!
+  captype: String!
+  contextlevel: Int!
+  component: String!
+  riskbitmask: Int
+}
+
+# ---------------------------------------------------------------------------
+# File types
+# ---------------------------------------------------------------------------
+
+type MoodleFile {
+  filename: String!
+  filepath: String
+  filesize: Int
+  fileurl: String
+  timemodified: DateTime
+  mimetype: String
+  isexternalfile: Boolean
+  repositorytype: String
+  icon: String
+}
+
+# ---------------------------------------------------------------------------
+# Message / Conversation types
+# ---------------------------------------------------------------------------
+
+type Message {
+  id: ID!
+  useridfrom: ID!
+  useridto: ID!
+  subject: String
+  text: String
+  fullmessage: String
+  fullmessageformat: TextFormat
+  fullmessagehtml: String
+  smallmessage: String
+  notification: Boolean
+  contexturl: String
+  contexturlname: String
+  timecreated: DateTime
+  timeread: DateTime
+  customdata: String
+}
+
+type Conversation {
+  id: ID!
+  type: Int!
+  name: String
+  subname: String
+  imageurl: String
+  iscreator: Boolean
+  isfavourite: Boolean
+  ismuted: Boolean
+  isread: Boolean
+  unreadcount: Int
+  membercount: Int
+  members: [User!]
+  messages: [Message!]
+  latestmessage: Message
+}
+
+type ConversationConnection {
+  nodes: [Conversation!]!
+  totalCount: Int!
+  pageInfo: PageInfo!
+}
+
+input SendMessageInput {
+  touserid: ID!
+  text: String!
+  textformat: TextFormat
+}
+
+# ---------------------------------------------------------------------------
+# Notification types
+# ---------------------------------------------------------------------------
+
+type Notification {
+  id: ID!
+  useridfrom: ID
+  useridto: ID!
+  subject: String
+  shortenedsubject: String
+  text: String
+  fullmessage: String
+  fullmessageformat: TextFormat
+  fullmessagehtml: String
+  smallmessage: String
+  contexturl: String
+  contexturlname: String
+  timecreated: DateTime
+  timeread: DateTime
+  read: Boolean
+  deleted: Boolean
+  iconurl: String
+  component: String
+  eventtype: String
+  customdata: String
+}
+
+type NotificationConnection {
+  nodes: [Notification!]!
+  totalCount: Int!
+  pageInfo: PageInfo!
+}
+
+# ---------------------------------------------------------------------------
+# Tag types
+# ---------------------------------------------------------------------------
+
+type Tag {
+  id: ID!
+  name: String!
+  rawname: String!
+  isstandard: Boolean
+  tagcollid: ID
+  userid: ID
+  flag: Int
+  timemodified: DateTime
+  description: String
+  descriptionformat: TextFormat
+  instances: [TagInstance!]
+}
+
+type TagInstance {
+  id: ID!
+  tagid: ID!
+  component: String!
+  itemtype: String!
+  itemid: ID!
+  contextid: ID!
+  tiuserid: ID
+  ordering: Int
+  timecreated: DateTime
+  timemodified: DateTime
+}
+
+# ---------------------------------------------------------------------------
+# Competency types
+# ---------------------------------------------------------------------------
+
+type CompetencyFramework {
+  id: ID!
+  shortname: String!
+  idnumber: String!
+  description: String
+  descriptionformat: TextFormat
+  visible: Boolean
+  scaleid: ID
+  scaleconfiguration: String
+  contextid: ID
+  taxonomies: String
+  timecreated: DateTime
+  timemodified: DateTime
+  usermodified: ID
+  competencies: [Competency!]
+}
+
+type Competency {
+  id: ID!
+  shortname: String!
+  idnumber: String
+  description: String
+  descriptionformat: TextFormat
+  visible: Boolean
+  path: String
+  ruleoutcome: Int
+  ruletype: String
+  ruleconfig: String
+  scaleid: ID
+  scaleconfiguration: String
+  competencyframeworkid: ID
+  framework: CompetencyFramework
+  parentid: ID
+  parent: Competency
+  children: [Competency!]
+  sortorder: Int
+  timecreated: DateTime
+  timemodified: DateTime
+}
+
+type UserCompetency {
+  id: ID!
+  user: User!
+  competency: Competency!
+  status: Int!
+  reviewerid: ID
+  proficiency: Boolean
+  grade: Int
+  timecreated: DateTime
+  timemodified: DateTime
+}
+
+# ---------------------------------------------------------------------------
+# Group types
+# ---------------------------------------------------------------------------
+
+type Group {
+  id: ID!
+  courseid: ID!
+  course: Course
+  idnumber: String
+  name: String!
+  description: String
+  descriptionformat: TextFormat
+  enrolmentkey: String
+  picture: Int
+  hidepicture: Boolean
+  timecreated: DateTime
+  timemodified: DateTime
+  members: [User!]
+}
+
+type Grouping {
+  id: ID!
+  courseid: ID!
+  course: Course
+  idnumber: String
+  name: String!
+  description: String
+  descriptionformat: TextFormat
+  timecreated: DateTime
+  timemodified: DateTime
+  groups: [Group!]
+}
+
+input CreateGroupInput {
+  courseid: ID!
+  name: String!
+  idnumber: String
+  description: String
+  enrolmentkey: String
+}
+
+# ---------------------------------------------------------------------------
+# Shared / utility types
+# ---------------------------------------------------------------------------
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+type CustomField {
+  name: String!
+  shortname: String!
+  type: String!
+  value: String
+  valueraw: String
+}
+
+input CustomFieldInput {
+  type: String!
+  name: String!
+  value: String!
+}
+
+enum TextFormat {
+  HTML
+  MOODLE
+  PLAIN
+  MARKDOWN
+}
+
+enum GroupMode {
+  NO_GROUPS
+  SEPARATE_GROUPS
+  VISIBLE_GROUPS
+}
+
+scalar DateTime
