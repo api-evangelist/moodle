@@ -178,6 +178,8 @@ apis:
   - type: Documentation
     url: https://moodledev.io/docs/apis/subsystems/payment
 common:
+- type: DomainSecurity
+  url: security/moodle-domain-security.yml
 - type: GitHubOrganization
   url: https://github.com/moodle
 - type: LinkedIn
