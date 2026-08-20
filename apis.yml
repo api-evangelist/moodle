@@ -30,6 +30,13 @@ tags:
 - EdTech
 - LMS
 - Moodle
+- Open-Source
+- Web Services
+tags_raw:
+- E-Learning
+- EdTech
+- LMS
+- Moodle
 - Open Source
 - Web Services
 apis:
@@ -111,6 +118,10 @@ apis:
     activities.
   humanURL: https://moodledev.io/docs/apis/subsystems/files
   tags:
+  - File
+  - Storage
+  - Uploads
+  tags_raw:
   - Files
   - Storage
   - Uploads
@@ -135,6 +146,10 @@ apis:
     enabling decoupled, observer-style integrations across Moodle.
   humanURL: https://moodledev.io/docs/apis/core/event
   tags:
+  - Event
+  - Logging
+  - Observers
+  tags_raw:
   - Events
   - Logging
   - Observers
