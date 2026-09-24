@@ -41,7 +41,7 @@ tags:
 - EdTech
 - LMS
 - Moodle
-- Open-Source
+- Open Source
 - Web Services
 tags_raw:
 - E-Learning
@@ -50,6 +50,7 @@ tags_raw:
 - Moodle
 - Open Source
 - Web Services
+- Open-Source
 apis:
 - aid: moodle:web-services
   name: Moodle Web Services API
@@ -66,8 +67,6 @@ apis:
   properties:
   - type: Documentation
     url: https://moodledev.io/docs/apis/subsystems/external/
-  - url: graphql/moodle-graphql.md
-    type: GraphQL
 - aid: moodle:external-functions
   name: Moodle External Functions API
   description: Allows developers to expose parametrized functions to external systems,
