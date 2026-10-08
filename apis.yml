@@ -215,6 +215,12 @@ apis:
   - type: Documentation
     url: https://moodledev.io/docs/apis/subsystems/payment
 common:
+- type: Plans
+  url: plans/moodle-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/moodle-rate-limits.yml
+- type: FinOps
+  url: finops/moodle-finops.yml
 - type: DomainSecurity
   url: security/moodle-domain-security.yml
 - type: GitHubOrganization
