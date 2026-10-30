@@ -1,4 +1,4 @@
-# Moodle (moodle)
+# Moodle
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -66,142 +66,119 @@
 
 Moodle is the world's open source learning platform, used by educators and organizations to deliver online courses and learning experiences. The Moodle developer platform exposes a broad set of internal APIs for plugin and core development, plus a Web Services API that enables external systems to integrate with Moodle for users, courses, enrollments, grading, and more.
 
-**URL:** [Visit APIs.yml URL](https://raw.githubusercontent.com/api-evangelist/moodle/refs/heads/main/apis.yml)
+**Areas:** E-Learning · EdTech · LMS · Moodle · Open Source · Web Services
 
-## Scope
+## Moodle on APIs.io
 
-- **Type:** Index
-- **Position:** Consuming
-- **Access:** 3rd-Party
+Everything profiled for Moodle is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/moodle/](https://apis.io/providers/moodle/)** — or go straight to one of the APIs or properties below.
 
-## Tags:
+### APIs (12)
 
- - E-Learning, EdTech, LMS, Moodle, Open Source, Web Services
+- [Moodle Web Services API](https://apis.io/apis/moodle/web-services/) — Exposes Moodle functionality as web services so external programs can integrate with a Moodle site for users, courses, enrollments, grading, and other…
+- [Moodle External Functions API](https://apis.io/apis/moodle/external-functions/) — Allows developers to expose parametrized functions to external systems, forming the basis of Moodle's web services and powering integrations consumed via…
+- [Moodle Access API](https://apis.io/apis/moodle/access/) — Provides functions to determine what the current user is allowed to do, checking roles, capabilities, and permissions across system, course, and activity…
+- [Moodle Roles API](https://apis.io/apis/moodle/roles/) — An extension of the Access API that defines the set of actions a user is allowed to perform on certain system levels through assignable roles and capabilities.
+- [Moodle Data Manipulation API (DML)](https://apis.io/apis/moodle/dml/) — Enables safe, consistent database read and write operations across Moodle, abstracting the underlying database driver and providing helpers for common query…
+- [Moodle File API](https://apis.io/apis/moodle/file/) — Manages file storage across plugins, providing a unified interface for uploading, retrieving, and serving files associated with users, courses, and activities.
+- [Moodle Form API](https://apis.io/apis/moodle/form/) — Defines and processes user data submitted through web forms, including validation, rendering, and persistence.
+- [Moodle Events API](https://apis.io/apis/moodle/events/) — Defines event handlers for inter-plugin communication and logging, enabling decoupled, observer-style integrations across Moodle.
+- [Moodle Hooks API](https://apis.io/apis/moodle/hooks/) — Enables indirect communication between core and plugins through well-defined extension points, allowing plugins to react to and modify core behavior.
+- [Moodle Privacy API](https://apis.io/apis/moodle/privacy/) — Describes stored personal data and supports discovery, export, and deletion of user data across plugins for GDPR and similar privacy compliance.
+- [Moodle Task API](https://apis.io/apis/moodle/task/) — Executes background jobs on a schedule or as one-off operations, allowing plugins to defer long-running work to cron processing.
+- [Moodle Payment API](https://apis.io/apis/moodle/payment/) — Manages payment processing in Moodle, providing pluggable payment gateways for paid enrollments and other monetized features.
 
-## Timestamps
+### Published properties
 
-- **Created:** 2025-01-08
-- **Modified:** 2026-04-28
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-## APIs
+#### GraphQL (1)
 
-### Moodle Web Services API
-Exposes Moodle functionality as web services so external programs can integrate with a Moodle site for users, courses, enrollments, grading, and other operations. Supports REST, XML-RPC, and SOAP protocols with token-based authentication.
+GraphQL schemas.
 
-**Human URL:** [https://moodledev.io/docs/apis/subsystems/external/](https://moodledev.io/docs/apis/subsystems/external/)
+- [Moved to /providers/moodle/](https://apis.io/graphqls/moodle/moodle-graphql/)
 
-#### Properties
+#### Security (1)
 
-- [Documentation](https://moodledev.io/docs/apis/subsystems/external/)
+Authentication, trust centre, and vulnerability disclosure.
 
-### Moodle External Functions API
-Allows developers to expose parametrized functions to external systems, forming the basis of Moodle's web services and powering integrations consumed via REST, SOAP, and XML-RPC.
+- [Moodle Domain Security](https://apis.io/security/moodle/moodle-domain-security/)
 
-**Human URL:** [https://moodledev.io/docs/apis/subsystems/external/functions](https://moodledev.io/docs/apis/subsystems/external/functions)
+#### Plans and pricing (1)
 
-#### Properties
+Published plans, tiers and prices.
 
-- [Documentation](https://moodledev.io/docs/apis/subsystems/external/functions)
+- [Moodle Plans Pricing](https://apis.io/plans/moodle/moodle-plans-pricing/)
 
-### Moodle Access API
-Provides functions to determine what the current user is allowed to do, checking roles, capabilities, and permissions across system, course, and activity contexts.
+#### Rate limits (1)
 
-**Human URL:** [https://moodledev.io/docs/apis/subsystems/access](https://moodledev.io/docs/apis/subsystems/access)
+Published request limits.
 
-#### Properties
+- [Moodle Rate Limits](https://apis.io/rate-limits/moodle/moodle-rate-limits/)
 
-- [Documentation](https://moodledev.io/docs/apis/subsystems/access)
+#### FinOps (1)
 
-### Moodle Roles API
-An extension of the Access API that defines the set of actions a user is allowed to perform on certain system levels through assignable roles and capabilities.
+What the API costs to run, by operation.
 
-**Human URL:** [https://moodledev.io/docs/apis/subsystems/access/roles](https://moodledev.io/docs/apis/subsystems/access/roles)
+- [Moodle Finops](https://apis.io/finops/moodle/moodle-finops/)
 
-#### Properties
+## Where to find this API
 
-- [Documentation](https://moodledev.io/docs/apis/subsystems/access/roles)
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
-### Moodle Data Manipulation API (DML)
-Enables safe, consistent database read and write operations across Moodle, abstracting the underlying database driver and providing helpers for common query patterns.
-
-**Human URL:** [https://moodledev.io/docs/apis/core/dml](https://moodledev.io/docs/apis/core/dml)
-
-#### Properties
-
-- [Documentation](https://moodledev.io/docs/apis/core/dml)
-
-### Moodle File API
-Manages file storage across plugins, providing a unified interface for uploading, retrieving, and serving files associated with users, courses, and activities.
-
-**Human URL:** [https://moodledev.io/docs/apis/subsystems/files](https://moodledev.io/docs/apis/subsystems/files)
-
-#### Properties
-
-- [Documentation](https://moodledev.io/docs/apis/subsystems/files)
-
-### Moodle Form API
-Defines and processes user data submitted through web forms, including validation, rendering, and persistence.
-
-**Human URL:** [https://moodledev.io/docs/apis/subsystems/form](https://moodledev.io/docs/apis/subsystems/form)
-
-#### Properties
-
-- [Documentation](https://moodledev.io/docs/apis/subsystems/form)
-
-### Moodle Events API
-Defines event handlers for inter-plugin communication and logging, enabling decoupled, observer-style integrations across Moodle.
-
-**Human URL:** [https://moodledev.io/docs/apis/core/event](https://moodledev.io/docs/apis/core/event)
-
-#### Properties
-
-- [Documentation](https://moodledev.io/docs/apis/core/event)
-
-### Moodle Hooks API
-Enables indirect communication between core and plugins through well-defined extension points, allowing plugins to react to and modify core behavior.
-
-**Human URL:** [https://moodledev.io/docs/apis/core/hooks](https://moodledev.io/docs/apis/core/hooks)
-
-#### Properties
-
-- [Documentation](https://moodledev.io/docs/apis/core/hooks)
-
-### Moodle Privacy API
-Describes stored personal data and supports discovery, export, and deletion of user data across plugins for GDPR and similar privacy compliance.
-
-**Human URL:** [https://moodledev.io/docs/apis/subsystems/privacy](https://moodledev.io/docs/apis/subsystems/privacy)
-
-#### Properties
-
-- [Documentation](https://moodledev.io/docs/apis/subsystems/privacy)
-
-### Moodle Task API
-Executes background jobs on a schedule or as one-off operations, allowing plugins to defer long-running work to cron processing.
-
-**Human URL:** [https://moodledev.io/docs/apis/subsystems/task](https://moodledev.io/docs/apis/subsystems/task)
-
-#### Properties
-
-- [Documentation](https://moodledev.io/docs/apis/subsystems/task)
-
-### Moodle Payment API
-Manages payment processing in Moodle, providing pluggable payment gateways for paid enrollments and other monetized features.
-
-**Human URL:** [https://moodledev.io/docs/apis/subsystems/payment](https://moodledev.io/docs/apis/subsystems/payment)
-
-#### Properties
-
-- [Documentation](https://moodledev.io/docs/apis/subsystems/payment)
-
-## Common Properties
-
-- [Portal](https://moodledev.io)
-- [Documentation](https://moodledev.io/docs/apis)
 - [Website](https://moodle.org)
+- [Documentation](https://moodledev.io/docs/apis)
 - [Blog](https://moodle.com/news/)
+- [GitHub](https://github.com/moodle)
 
-## Maintainers
+## API Evangelist rating
 
-**FN:** Kin Lane
+**Kin Score 11.6** — emerging · rubric 0.24.0 · scored 2026-10-17
 
-**Email:** kin@apievangelist.com
+| Facet | Score |
+|---|---|
+| Discoverability | 62.5 |
+| Contract quality | 0.0 |
+| Contract governance | 0.0 |
+| Operational transparency | 10.5 |
+| Developer ergonomics | 21.4 |
+| Access clarity | 7.9 |
+
+**Agent readiness 0.6** — human-only
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | — |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | — |
+| Idempotency | — |
+| Error Semantics | — |
+| OpenAPI Examples | — |
+| Rate Limit Signal | derived (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 5.9** — Education & Research
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/moodle/](https://apis.io/providers/moodle/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Moodle: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/moodle/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
